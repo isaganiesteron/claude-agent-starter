@@ -22,7 +22,11 @@ your-agent/
         ├── prompt-contract.md         ← Define task scope before executing
         ├── agent-review.md            ← Sub-agent verification of outputs
         ├── reverse-prompt.md          ← Clarifying questions before complex tasks
-        └── skill-creator.md           ← Create new skills from processes or knowledge
+        ├── skill-creator.md           ← Create new skills from processes or knowledge
+        ├── onboard.md                 ← Interview-style setup for new agents
+        ├── prompt-master.md           ← Optimizes messy prompts before executing
+        ├── humanizer.md               ← Removes AI writing tells from content
+        └── fact-checker.md            ← Verifies factual accuracy of any text
 ```
 
 ## Quick Start
@@ -30,13 +34,11 @@ your-agent/
 ### Step 1 — Install Claude Code
 
 **Windows (PowerShell):**
-
 ```powershell
 irm https://claude.ai/install.ps1 | iex
 ```
 
 If after install the `claude` command is not recognized, add it to PATH:
-
 ```powershell
 [Environment]::SetEnvironmentVariable("PATH", "$env:PATH;$env:USERPROFILE\.local\bin", [EnvironmentVariableTarget]::User)
 ```
@@ -57,7 +59,6 @@ claude
 ### Step 3 — Fill In CLAUDE.md
 
 Open `CLAUDE.md` and fill in the three sections:
-
 - **Identity** — who this agent is and what it does
 - **Goals** — what it is working toward
 - **Context** — background knowledge it needs
@@ -69,7 +70,6 @@ The comments inside guide you on what to write. Keep it focused and specific —
 If you want the `/chrome` skill to work, follow these steps. Without it the agent can still use all other skills.
 
 **Prerequisites:**
-
 - Node.js installed — check with `node --version`. Download from nodejs.org if needed.
 - Google Chrome installed.
 
@@ -84,19 +84,16 @@ The `--scope user` flag makes it available across all your agents. You should se
 **Launch Chrome with remote debugging** before using browser control:
 
 Windows:
-
 ```cmd
 "C:\Program Files\Google\Chrome\Application\chrome.exe" --remote-debugging-port=9222
 ```
 
 Mac:
-
 ```bash
 /Applications/Google\ Chrome.app/Contents/MacOS/Google\ Chrome --remote-debugging-port=9222
 ```
 
 **Restart Claude Code** then verify the connection:
-
 ```
 list all open browser tabs
 ```
@@ -109,15 +106,19 @@ Claude Code reads CLAUDE.md at the start of every session. Your agent will know 
 
 ## Pre-Built Skills
 
-| Skill           | Command            | What It Does                                             |
-| --------------- | ------------------ | -------------------------------------------------------- |
-| Chrome Control  | `/chrome`          | Controls a browser to interact with any web app          |
-| Research        | `/research`        | Researches a topic and saves findings to memory/         |
-| Consensus       | `/consensus`       | Spawns multiple agents for better decisions and ideation |
-| Prompt Contract | `/prompt-contract` | Agrees on task scope before executing                    |
-| Agent Review    | `/agent-review`    | Fresh sub-agent reviews completed work for quality       |
-| Reverse Prompt  | `/reverse-prompt`  | Asks clarifying questions before complex tasks           |
-| Skill Creator   | `/skill-creator`   | Creates a new skill from a process or uploaded knowledge |
+| Skill | Command | What It Does |
+|---|---|---|
+| Chrome Control | `/chrome` | Controls a browser to interact with any web app |
+| Research | `/research` | Researches a topic and saves findings to memory/ |
+| Consensus | `/consensus` | Spawns multiple agents for better decisions and ideation |
+| Prompt Contract | `/prompt-contract` | Agrees on task scope before executing |
+| Agent Review | `/agent-review` | Fresh sub-agent reviews completed work for quality |
+| Reverse Prompt | `/reverse-prompt` | Asks clarifying questions before complex tasks |
+| Skill Creator | `/skill-creator` | Creates a new skill from a process or uploaded knowledge |
+| Onboard | `/onboard` | Interview-style setup that writes your agent's identity into CLAUDE.md |
+| Prompt Master | `/prompt-master` | Optimizes messy prompts before executing for better output quality |
+| Humanizer | `/humanizer` | Removes AI writing tells from any content before it goes out |
+| Fact Checker | `/fact-checker` | Verifies factual accuracy of any text or claims |
 
 ## Adding Your Own Skills
 
@@ -133,15 +134,12 @@ triggers: keyword1, keyword2, keyword3
 # Skill Title
 
 ## When to Use
-
 [Describe trigger conditions]
 
 ## How to Execute
-
 [Step by step instructions]
 
 ## Definition of Done
-
 [Exact conditions that mean this task is complete]
 ```
 
@@ -149,8 +147,7 @@ Or just do a process manually with the agent and say "create a skill for what we
 
 ## The Self-Improving Agent
 
-The **Learned Rules** section at the bottom of `CLAUDE.md` grows automatically. When you correct the agent or it makes a mistake, it appends a new rule so the same thing never happens again. Over time your agent gets progressively better at understanding your preferences without you having to
-re-explain things.
+The **Learned Rules** section at the bottom of `CLAUDE.md` grows automatically. When you correct the agent or it makes a mistake, it appends a new rule so the same thing never happens again. Over time your agent gets progressively better at understanding your preferences without you having to re-explain things.
 
 ## Specializing This Template
 
