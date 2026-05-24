@@ -4,7 +4,7 @@ A general-purpose starter for building Claude Code agents — smart assistants t
 
 ## What This Is
 
-This template gives you a pre-wired foundation so you can focus on defining your agent's identity and purpose rather than building the infrastructure from scratch. Every agent you build starts here and gets specialized through the CLAUDE.md and custom skills you add.
+This is a GitHub template repository. Every new agent you build starts from here — one click to create, then specialize it for its purpose. No setup from scratch, no copy-pasting files. Just clone, onboard, and go.
 
 ## Folder Structure
 
@@ -13,6 +13,7 @@ your-agent/
 ├── CLAUDE.md                          ← Agent identity, goals, rules, learned rules
 ├── README.md                          ← This file
 ├── memory/
+│   ├── MEMORY.md                      ← Index of all accumulated knowledge
 │   └── research/                      ← Agent saves research findings here
 └── .claude/
     └── commands/                      ← Skills the agent knows how to execute
@@ -29,100 +30,129 @@ your-agent/
         └── fact-checker.md            ← Verifies factual accuracy of any text
 ```
 
-## Quick Start
+---
 
-### Step 1 — Install Claude Code
+## Prerequisites
+
+Before creating your first agent, do this once.
+
+### 1 — Install Claude Code
 
 **Windows (PowerShell):**
+
 ```powershell
 irm https://claude.ai/install.ps1 | iex
 ```
 
-If after install the `claude` command is not recognized, add it to PATH:
+If `claude` is not recognized after install, add it to PATH:
+
 ```powershell
 [Environment]::SetEnvironmentVariable("PATH", "$env:PATH;$env:USERPROFILE\.local\bin", [EnvironmentVariableTarget]::User)
 ```
 
-Then close and reopen your terminal.
+Close and reopen your terminal. You need a **Claude Pro subscription** ($20/month) to use Claude Code.
 
-You need a Claude Pro subscription ($20/month) to use Claude Code.
+### 2 — Connect Chrome DevTools MCP (Optional)
 
-### Step 2 — Create Your Agent Folder
+Only needed if you want browser control via the `/chrome` skill. Skip if not needed — all other skills work without it.
 
-Copy this template folder and rename it to your agent's purpose (e.g. `social-media-agent`). Then open Claude Code inside it:
+**Requirements:** Node.js (`node --version` to check — download from nodejs.org if missing) and Google Chrome.
 
-```cmd
-cd your-agent-name
-claude
-```
-
-### Step 3 — Fill In CLAUDE.md
-
-Open `CLAUDE.md` and fill in the three sections:
-- **Identity** — who this agent is and what it does
-- **Goals** — what it is working toward
-- **Context** — background knowledge it needs
-
-The comments inside guide you on what to write. Keep it focused and specific — the more clearly you define the agent's purpose the better it performs.
-
-### Step 4 — Connect Chrome DevTools MCP (Optional)
-
-If you want the `/chrome` skill to work, follow these steps. Without it the agent can still use all other skills.
-
-**Prerequisites:**
-- Node.js installed — check with `node --version`. Download from nodejs.org if needed.
-- Google Chrome installed.
-
-**Install the MCP server** (run in terminal outside Claude Code):
+**Install the MCP server** (run once in terminal outside Claude Code):
 
 ```cmd
 claude mcp add --scope user chrome-devtools npx -- -y chrome-devtools-mcp@latest
 ```
 
-The `--scope user` flag makes it available across all your agents. You should see `Added stdio MCP server chrome-devtools... to user config`.
-
-**Launch Chrome with remote debugging** before using browser control:
+**Launch Chrome with remote debugging** every time you want to use browser control:
 
 Windows:
+
 ```cmd
 "C:\Program Files\Google\Chrome\Application\chrome.exe" --remote-debugging-port=9222
 ```
 
 Mac:
+
 ```bash
 /Applications/Google\ Chrome.app/Contents/MacOS/Google\ Chrome --remote-debugging-port=9222
 ```
 
-**Restart Claude Code** then verify the connection:
+Verify it works inside Claude Code by typing: `list all open browser tabs`
+
+---
+
+## Creating a New Agent
+
+### Step 1 — Use This Template
+
+On GitHub, click **"Use this template"** → **"Create a new repository"**. Name it after the agent's purpose (e.g. `social-media-agent`, `research-agent`, `n8n-builder`). Then clone it locally:
+
+```cmd
+git clone https://github.com/YOUR-USERNAME/your-agent-name.git
+cd your-agent-name
 ```
-list all open browser tabs
+
+### Step 2 — Open in Claude Code
+
+```cmd
+claude
 ```
 
-If it returns your open tabs, browser control is working.
+Or open the folder in VS Code with the Claude Code extension installed.
 
-### Step 5 — Start Talking to Your Agent
+### Step 3 — Run Onboarding
 
-Claude Code reads CLAUDE.md at the start of every session. Your agent will know exactly who it is and what skills it has. Start giving it tasks.
+The agent will automatically detect it hasn't been set up yet and run `/onboard` on first launch. It will interview you like a new virtual assistant on their first day — asking about your business, the role, goals, working style, and tools.
+
+Once you answer the questions the agent writes its own identity into `CLAUDE.md`. No manual file editing required.
+
+You can also trigger it manually anytime:
+
+```
+/onboard
+```
+
+### Step 4 — Start Working
+
+That's it. Your agent is ready. Start giving it tasks. It will:
+
+- Use its skills automatically based on what you ask
+- Save research to `memory/research/` and update the knowledge index
+- Improve over time by appending learned rules when you correct it
+- Check existing knowledge before re-researching anything
+
+---
 
 ## Pre-Built Skills
 
-| Skill | Command | What It Does |
-|---|---|---|
-| Chrome Control | `/chrome` | Controls a browser to interact with any web app |
-| Research | `/research` | Researches a topic and saves findings to memory/ |
-| Consensus | `/consensus` | Spawns multiple agents for better decisions and ideation |
-| Prompt Contract | `/prompt-contract` | Agrees on task scope before executing |
-| Agent Review | `/agent-review` | Fresh sub-agent reviews completed work for quality |
-| Reverse Prompt | `/reverse-prompt` | Asks clarifying questions before complex tasks |
-| Skill Creator | `/skill-creator` | Creates a new skill from a process or uploaded knowledge |
-| Onboard | `/onboard` | Interview-style setup that writes your agent's identity into CLAUDE.md |
-| Prompt Master | `/prompt-master` | Optimizes messy prompts before executing for better output quality |
-| Humanizer | `/humanizer` | Removes AI writing tells from any content before it goes out |
-| Fact Checker | `/fact-checker` | Verifies factual accuracy of any text or claims |
+| Skill           | Command            | What It Does                                                          |
+| --------------- | ------------------ | --------------------------------------------------------------------- |
+| Onboard         | `/onboard`         | Interview-style setup that writes the agent's identity into CLAUDE.md |
+| Chrome Control  | `/chrome`          | Controls a browser to interact with any web app                       |
+| Research        | `/research`        | Researches a topic and saves findings to memory/                      |
+| Consensus       | `/consensus`       | Spawns multiple agents for better decisions and ideation              |
+| Prompt Contract | `/prompt-contract` | Agrees on task scope before executing                                 |
+| Agent Review    | `/agent-review`    | Fresh sub-agent reviews completed work for quality                    |
+| Reverse Prompt  | `/reverse-prompt`  | Asks clarifying questions before complex tasks                        |
+| Prompt Master   | `/prompt-master`   | Optimizes messy prompts before executing for better output quality    |
+| Humanizer       | `/humanizer`       | Removes AI writing tells from any content before it goes out          |
+| Fact Checker    | `/fact-checker`    | Verifies factual accuracy of any text or claims                       |
+| Skill Creator   | `/skill-creator`   | Creates a new skill from a completed process or uploaded knowledge    |
+
+---
 
 ## Adding Your Own Skills
 
-Create a new `.md` file in `.claude/commands/`. Every skill needs:
+The easiest way — do a process manually with the agent, then say:
+
+```
+create a skill for what we just did
+```
+
+The `/skill-creator` skill packages the whole process automatically.
+
+Or create a `.md` file manually in `.claude/commands/`:
 
 ```markdown
 ---
@@ -134,28 +164,37 @@ triggers: keyword1, keyword2, keyword3
 # Skill Title
 
 ## When to Use
+
 [Describe trigger conditions]
 
 ## How to Execute
+
 [Step by step instructions]
 
 ## Definition of Done
+
 [Exact conditions that mean this task is complete]
 ```
 
-Or just do a process manually with the agent and say "create a skill for what we just did" — the skill-creator skill will package it automatically.
+---
 
-## The Self-Improving Agent
+## How the Agent Improves Over Time
 
-The **Learned Rules** section at the bottom of `CLAUDE.md` grows automatically. When you correct the agent or it makes a mistake, it appends a new rule so the same thing never happens again. Over time your agent gets progressively better at understanding your preferences without you having to re-explain things.
+**Learned Rules** — The `Learned Rules` section at the bottom of `CLAUDE.md` grows automatically. Every time you correct the agent it appends a new rule so the same mistake never happens again.
 
-## Specializing This Template
+**Knowledge Base** — Every research task saves findings to `memory/research/` and updates `memory/MEMORY.md`. Future sessions build on this knowledge rather than starting fresh.
 
-This template is intentionally blank on identity. To create a specialized agent:
+**New Skills** — Any repeatable process you do manually can be packaged as a skill on the spot. Over time your agent accumulates skills for everything it regularly does.
 
-1. Copy this folder and rename it to the agent's purpose
-2. Fill in CLAUDE.md with identity, goals, and context
-3. Add purpose-specific skills to `.claude/commands/`
-4. Run it and let the Learned Rules section grow through use
+The longer you use an agent the better it gets — at understanding your preferences, avoiding past mistakes, and executing recurring tasks without needing re-explanation.
 
-The same template becomes a social media agent, a research agent, an n8n builder, or anything else — just by changing what goes into CLAUDE.md and which skills you add.
+---
+
+## Examples of Agents You Can Build
+
+- **Social Media Agent** — researches trends, writes content, builds content calendars
+- **Research Agent** — deep dives on any topic, saves structured findings, synthesizes insights
+- **n8n Builder** — controls the n8n UI via browser to build and modify workflows
+- **Lead Researcher** — finds and qualifies prospects, saves profiles to memory
+- **Content Agent** — writes, humanizes, and fact-checks content for any platform
+- **Executive Assistant** — manages tasks, drafts emails, summarizes meetings
